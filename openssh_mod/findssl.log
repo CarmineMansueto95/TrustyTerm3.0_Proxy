@@ -1,0 +1,43 @@
+Trying libcrypto /lib/i386-linux-gnu/libcrypto.so.1.0.0
+conftest.c: In function ‘main’:
+conftest.c:2:32: warning: implicit declaration of function ‘SSLeay’ [-Wimplicit-function-declaration]
+ int main(){printf("0x%08xL\n", SSLeay());}
+                                ^~~~~~
+/lib/i386-linux-gnu/libcrypto.so.1.0.0: error adding symbols: Formato del file errato
+collect2: error: ld returned 1 exit status
+Trying libcrypto /usr/lib/i386-linux-gnu/libcrypto.so.1.0.0
+conftest.c: In function ‘main’:
+conftest.c:2:32: warning: implicit declaration of function ‘SSLeay’ [-Wimplicit-function-declaration]
+ int main(){printf("0x%08xL\n", SSLeay());}
+                                ^~~~~~
+/usr/lib/i386-linux-gnu/libcrypto.so.1.0.0: error adding symbols: Formato del file errato
+collect2: error: ld returned 1 exit status
+Trying libcrypto /usr/lib/x86_64-linux-gnu/libcrypto.so
+conftest.c: In function ‘main’:
+conftest.c:2:32: warning: implicit declaration of function ‘SSLeay’ [-Wimplicit-function-declaration]
+ int main(){printf("0x%08xL\n", SSLeay());}
+                                ^~~~~~
+/tmp/ccP3Jy2H.o: nella funzione "main":
+conftest.c:(.text+0xa): riferimento non definito a "SSLeay"
+collect2: error: ld returned 1 exit status
+Trying libcrypto /usr/lib/x86_64-linux-gnu/libcrypto.so.1.0.0
+conftest.c: In function ‘main’:
+conftest.c:2:32: warning: implicit declaration of function ‘SSLeay’ [-Wimplicit-function-declaration]
+ int main(){printf("0x%08xL\n", SSLeay());}
+                                ^~~~~~
+Trying libcrypto /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1
+conftest.c: In function ‘main’:
+conftest.c:2:32: warning: implicit declaration of function ‘SSLeay’ [-Wimplicit-function-declaration]
+ int main(){printf("0x%08xL\n", SSLeay());}
+                                ^~~~~~
+/tmp/ccagAfbN.o: nella funzione "main":
+conftest.c:(.text+0xa): riferimento non definito a "SSLeay"
+collect2: error: ld returned 1 exit status
+Trying libcrypto /usr/lib/x86_64-linux-gnu/libcrypto.a
+conftest.c: In function ‘main’:
+conftest.c:2:32: warning: implicit declaration of function ‘SSLeay’ [-Wimplicit-function-declaration]
+ int main(){printf("0x%08xL\n", SSLeay());}
+                                ^~~~~~
+/tmp/cckOKAFK.o: nella funzione "main":
+conftest.c:(.text+0xa): riferimento non definito a "SSLeay"
+collect2: error: ld returned 1 exit status
