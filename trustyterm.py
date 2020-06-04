@@ -130,6 +130,7 @@ class Multiplex:
         return fds
 
     def proc_kill(self, fd):
+    	print("Killing process")
         try:
             os.close(fd) # Close file descriptor fd
             os.kill(self.proc[fd]['pid'],signal.SIGHUP) # send SIGHUP to the process on the pty slave side(# SIGHUP is a signal sent to a process when its controlling terminal is closed)
@@ -369,6 +370,9 @@ class TrustyTerm: # WSGI application
                     return req
 
         if req.PATH_INFO.endswith('/encr_sig'): # Browser has sent me the Encrypted Digital Signature and Encrypted AES Key
+
+            req.response_headers['Content-Type']='application/json'
+
             if environ.has_key("REMOTE_ADDR"):
                 ip = environ['REMOTE_ADDR']
                 if ip == "127.0.0.1" and environ.has_key("HTTP_X_FORWARDED_FOR"):
@@ -460,7 +464,7 @@ class TrustyTerm: # WSGI application
             session_found = 0
 
             # init response
-            req.response_headers['Content-Type']='text/xml'
+            req.response_headers['Content-Type']='application/json'
 
             # request session setup phase
             session_setup_phase = int(req.REQUEST["phase"])
@@ -499,7 +503,7 @@ class TrustyTerm: # WSGI application
             return req
 
 
-        if req.PATH_INFO.endswith('/notify_auth_fail'):
+        if req.PATH_INFO.endswith('/notify_auth_fail'):  # Received by Server
             # init response
             req.response_headers['Content-Type']='text/xml'
 
@@ -514,8 +518,7 @@ class TrustyTerm: # WSGI application
 
         if req.PATH_INFO.endswith('/u'): # terminal emulation request
             # init response
-            req.response_headers['Content-Type']='text/xml'
-            # request values
+            req.response_headers['Content-Type']='application/json'
 
             tt_sid = req.REQUEST["TT_SID"]
             ssh_sid = req.REQUEST["SSH_SID"]
@@ -526,7 +529,7 @@ class TrustyTerm: # WSGI application
                 pty = self.session[tt_sid]
 
                 if(pty not in self.multi.proc): # This is the case where SSH session was deleted but TT_SID is still in self.session dict
-                	req.write('SSH Session deleted')
+                	req.write('{"msg":"SSH Session deleted"')
                 	return req
 
                 # ================= NEW CODE =================
@@ -542,11 +545,11 @@ class TrustyTerm: # WSGI application
                     del self.ttsid_srvrip[tt_sid]
                     del self.keystrokes_auth_fail[tt_sid]
 
-                    req.write('Keystrokes authentication failed')
+                    req.write('{"msg":"Keystrokes authentication failed"}')
                     return req
                 # ============================================
             else:
-                req.write('Invalid TT_SID')
+                req.write('{"msg":"Invalid TT_SID"')
                 return req
 
             # if keypressed
@@ -556,12 +559,11 @@ class TrustyTerm: # WSGI application
             # get screen update
             resp = self.multi.dump(pty)
             if resp:
-                req.write(resp)
+                req.write('{"msg":"' + resp + '"}')
                 req.response_gzencode = 1 # compress with gzip
-                #print("Sending to Browser: ", resp)
                 #print("IV|TAG|CIPHER LEN: ", len(resp))
             else:
-                req.write('<?xml version="1.0"?><idem></idem>')
+                req.write('{"msg":"IDEM"}')
             return req
 
         else: # page loading request
