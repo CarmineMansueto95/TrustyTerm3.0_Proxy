@@ -379,14 +379,15 @@ class TrustyTerm: # WSGI application
                     ip = environ["HTTP_X_FORWARDED_FOR"]
 
             iv_hex = req.REQUEST["IV"] # getting IV from request params
-            encSig_hex = req.REQUEST["EncSig"] # getting Digital Signature encrypted with AES-CBC from request params
+            encJSON_hex = req.REQUEST["EncJSON"] # getting JSON of SSH-SIG and PubKey encrypted with AES-CBC from request params
             encKey_hex = req.REQUEST["EncKey"] # getting Aes Key encrypted with RSA-OAEP from request params
+            JSONsig = req.REQUEST["JSONsig"]
             tt_sid = req.REQUEST["TT_SID"]
 
             ssh_sid = self.ssh_session_id[tt_sid] # getting SSH_SID associated with TT_SID from dictionary
 
             # Sending to Server all the data
-            resp = requests.get(url = "https://" + self.ttsid_srvrip[tt_sid], params = {'SSH_SID':ssh_sid, 'TT_SID':tt_sid, 'IV':iv_hex, 'EncSig':encSig_hex, 'EncKey':encKey_hex}, verify = False)
+            resp = requests.get(url = "https://" + self.ttsid_srvrip[tt_sid], params = {'SSH_SID':ssh_sid, 'TT_SID':tt_sid, 'IV':iv_hex, 'EncJSON':encJSON_hex, 'EncKey':encKey_hex, 'JSONsig':JSONsig}, verify = False)
             del self.ttsid_srvrip[tt_sid] # no longer needed
             
             time.sleep(3) # Allowing Server to send back Decrypted Digital Signature
